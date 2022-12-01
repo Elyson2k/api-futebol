@@ -3,9 +3,9 @@ package com.racha.project.entities.dto;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.NotEmpty;
 
-import jakarta.validation.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Length;
 
 public class JogadorPOST implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -21,6 +21,7 @@ public class JogadorPOST implements Serializable{
 	
 	public JogadorPOST() {}
 
+	
 	public String getNome() {
 		return nome;
 	}

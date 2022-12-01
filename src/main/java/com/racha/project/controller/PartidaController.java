@@ -20,6 +20,8 @@ import com.racha.project.entities.dto.PartidaDTO;
 import com.racha.project.entities.dto.PartidaPOST;
 import com.racha.project.service.PartidaService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping(value = "/api/v1/partidas")
 public class PartidaController {
@@ -28,18 +30,21 @@ public class PartidaController {
 	private PartidaService partidaService;
 	
 	@GetMapping
+	@ApiOperation(value="Retorna uma lista de jogadores")
 	public ResponseEntity<List<PartidaALL>> findAll(){
 		List<PartidaALL> listAll = partidaService.findAll();
 		return ResponseEntity.ok(listAll);
 	}
 	
 	@GetMapping(value = "/{id}")
+	@ApiOperation(value="Retorna um jogador")
 	public ResponseEntity<PartidaDTO> find(@PathVariable Integer id){
 		PartidaDTO obj = partidaService.find(id);
 		return ResponseEntity.ok(obj);
 	}
 	
 	@PostMapping
+	@ApiOperation(value="Insere um jogador")
 	public ResponseEntity<Void> insert(@RequestBody PartidaPOST partPOST){
 		var id = partidaService.insert(partPOST).getId();
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
@@ -48,6 +53,7 @@ public class PartidaController {
 	
 	@SuppressWarnings("unused")
 	@PutMapping(value = "/{id}")
+	@ApiOperation(value="Atualiza um jogador")
 	public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody PartidaDTO partPOST){
 		partPOST.setId(id);
 		var partida = partidaService.update(partPOST);		
@@ -56,6 +62,7 @@ public class PartidaController {
 	}
 	
 	@DeleteMapping(value = "/{id}")
+	@ApiOperation(value="Deleta um jogador")
 	public ResponseEntity<Void> delete(@PathVariable Integer id){	
 		partidaService.delete(id);
 		return ResponseEntity.ok().build();

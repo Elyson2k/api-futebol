@@ -3,6 +3,8 @@ package com.racha.project.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +23,7 @@ import com.racha.project.entities.dto.JogadorPOST;
 import com.racha.project.entities.dto.JogadorPUT;
 import com.racha.project.service.JogadorService;
 
-import jakarta.validation.Valid;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping(value = "/api/v1/jogadores")
@@ -31,18 +33,21 @@ public class JogadorController {
 	private JogadorService jogadorService;
 	
 	@GetMapping
+	@ApiOperation(value="Retorna uma lista de partidas")
 	public ResponseEntity<List<JogadorALL>> findAll(){
 		List<JogadorALL> listAll = jogadorService.findAll();
 		return ResponseEntity.ok(listAll);
 	}
 	
 	@GetMapping(value = "/{id}")
+	@ApiOperation(value="Retorna uma unica partida")
 	public ResponseEntity<JogadorDTO> find(@PathVariable Integer id){
 		JogadorDTO obj = jogadorService.find(id);
 		return ResponseEntity.ok(obj);
 	}
 	
 	@PostMapping
+	@ApiOperation(value="Inserir uma partida")
 	public ResponseEntity<Void> insert(@Valid @RequestBody JogadorPOST partPOST){
 		var id = jogadorService.insert(partPOST).getId();
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
@@ -51,7 +56,8 @@ public class JogadorController {
 	
 	@SuppressWarnings("unused")
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Integer id, @RequestBody JogadorPUT obj){
+	@ApiOperation(value="Atualiza uma partida")
+	public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody JogadorPUT obj){
 		obj.setId(id);
 		var newObj1 = jogadorService.update(obj);		
 		JogadorPUT newObj2 = new JogadorPUT(newObj1);
@@ -59,6 +65,7 @@ public class JogadorController {
 	}
 	
 	@DeleteMapping(value = "/{id}")
+	@ApiOperation(value="Exclui uma partida")
 	public ResponseEntity<Void> delete(@PathVariable Integer id){	
 		jogadorService.delete(id);
 		return ResponseEntity.ok().build();

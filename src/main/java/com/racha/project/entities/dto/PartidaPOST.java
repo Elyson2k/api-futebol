@@ -3,7 +3,7 @@ package com.racha.project.entities.dto;
 import java.util.Date;
 import java.util.Objects;
 
-import jakarta.persistence.Column;
+import javax.persistence.Column;
 
 public class PartidaPOST {
 	
