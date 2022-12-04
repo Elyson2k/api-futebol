@@ -8,6 +8,7 @@ class RachaApplicationTests {
 
 	@Test
 	void contextLoads() {
+		RachaApplication.main(new String[] {});
 	}
 
 }
