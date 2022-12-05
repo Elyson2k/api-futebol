@@ -17,6 +17,17 @@ public class JogadorPUT implements Serializable{
 	
 	public JogadorPUT() {};
 	
+	
+	public JogadorPUT(Integer id, String nome, Integer partidaId, String posicao) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.partidaId = partidaId;
+		this.posicao = posicao;
+	}
+
+
+
 	public JogadorPUT(Jogador obj) {
 		super();
 		this.id = obj.getId();

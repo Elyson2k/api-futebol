@@ -11,6 +11,12 @@ public class PartidaPOST {
 	@Column(unique = true)
 	private Date horas;
 	
+	public PartidaPOST(String local, Date horas) {
+		super();
+		this.local = local;
+		this.horas = horas;
+	}
+
 	public PartidaPOST() {}
 
 	public String getLocal() {

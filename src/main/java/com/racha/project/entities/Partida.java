@@ -69,10 +69,6 @@ public class Partida implements Serializable{
 		return jogadores;
 	}
 
-	public void setJogadores(Set<Jogador> jogadores) {
-		this.jogadores = jogadores;
-	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(horas);

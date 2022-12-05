@@ -12,6 +12,13 @@ public class PartidaALL implements Serializable{
 	private String local;
 	private Date horas;
 	
+	public PartidaALL(Integer id, String local, Date horas) {
+		super();
+		this.id = id;
+		this.local = local;
+		this.horas = horas;
+	}
+
 	public PartidaALL() {};
 	
 	public PartidaALL(Partida obj) {

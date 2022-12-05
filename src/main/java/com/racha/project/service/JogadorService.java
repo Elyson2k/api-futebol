@@ -15,7 +15,6 @@ import com.racha.project.entities.dto.JogadorPOST;
 import com.racha.project.entities.dto.JogadorPUT;
 import com.racha.project.repository.JogadorRepository;
 import com.racha.project.repository.PartidaRepository;
-import com.racha.project.service.exceptions.EmptyResultDataAccessException;
 import com.racha.project.service.exceptions.ObjectNotFoundException;
 
 @Service
@@ -36,7 +35,7 @@ public class JogadorService {
 		var newObj = obj.orElseThrow( () -> new ObjectNotFoundException("ERROR: ID não cadastrado no sistema.") );
 		return new JogadorDTO(newObj);
 	}
-	
+
 	public Jogador insert(JogadorPOST jogPost) {
 		
 		Partida partida = new Partida(jogPost.getPartidaId(), null, null);
@@ -69,11 +68,9 @@ public class JogadorService {
 	}
 	
 	public void delete(Integer id) {
-		try {
-			jogadorRepository.deleteById(id);
-		} catch (RuntimeException e) {
-			throw new EmptyResultDataAccessException("ERROR: Não pode excluir essa entidade.");
-		}
+		find(id);
+		jogadorRepository.deleteById(id);
+		
 	}
 	
 }

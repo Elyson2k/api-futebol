@@ -16,8 +16,15 @@ public class PartidaDTO implements Serializable{
 	private Date horas;
 	private Set<Jogador> jogadores = new HashSet<>();
 	
-	public PartidaDTO() {};
-	
+
+	public PartidaDTO(Integer id, String local, Date horas) {
+		super();
+		this.id = id;
+		this.local = local;
+		this.horas = horas;
+	}
+
+
 	public PartidaDTO(Partida obj) {
 		this.id = obj.getId();
 		this.local = obj.getLocal();

@@ -72,10 +72,6 @@ public class Jogador implements Serializable{
 		return posicoes;
 	}
 
-	public void setPosicoes(Set<String> pos) {
-		this.posicoes = pos;
-	}
-
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

@@ -1,11 +1,7 @@
 package com.racha.project.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import com.racha.project.entities.Jogador;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface JogadorRepository extends JpaRepository<Jogador, Integer>{
-
+public interface JogadorRepository extends JpaRepository<Jogador,Integer> {
 }
