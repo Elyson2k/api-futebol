@@ -1,10 +1,8 @@
 package com.racha.project.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.racha.project.entities.Partida;
@@ -16,18 +14,19 @@ import com.racha.project.service.exceptions.ObjectNotFoundException;
 
 @Service
 public class PartidaService {
-	
-	@Autowired
-	private PartidaRepository partidaRepository;
-	
+	private final PartidaRepository partidaRepository;
+
+	public PartidaService(PartidaRepository partidaRepository) {
+		this.partidaRepository = partidaRepository;
+	}
+
 	public List<PartidaALL> findAll(){
 		return partidaRepository.findAll().stream().map(obj -> new PartidaALL(obj)).collect(Collectors.toList());
 	}
 	
-	public PartidaDTO find(Integer id) {
-		Optional<Partida> obj = partidaRepository.findById(id);
-		var newObj = obj.orElseThrow( () -> new ObjectNotFoundException("ERROR: ID não encontrado no sistema.") );
-		return new PartidaDTO(newObj);
+	public Partida findById(Integer id) {
+		return partidaRepository.findById(id)
+			.orElseThrow(() -> new ObjectNotFoundException("ERROR: Partida não encontrada no sistema.") );
 	}
 	
 	public Partida insert(PartidaPOST partida) {
@@ -48,7 +47,7 @@ public class PartidaService {
 	}
 	
 	public void delete(Integer id) {
-		find(id);
+		findById(id);
 		partidaRepository.deleteById(id);
 		
 	}

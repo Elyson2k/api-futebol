@@ -19,8 +19,6 @@ public class JogadorPOST implements Serializable{
 	private String pos2;
 	private Integer partidaId;
 	
-	
-	
 	public JogadorPOST(
 			@NotEmpty(message = "Preenchimento obrigatorio.") @Length(min = 4, max = 15, message = "Comprimento minimo : 4 letras / maximo : 15") String nome,
 			@NotEmpty(message = "Preenchimento obrigatorio.") @Length(min = 2, max = 3, message = "Comprimento minimo : 3 letras / maximo : 3") String pos1,

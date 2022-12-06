@@ -23,7 +23,6 @@ public class Jogador implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
@@ -46,30 +45,48 @@ public class Jogador implements Serializable{
 		this.partida = partida;
 	}
 
+	public Jogador clone() {
+		return new Jogador()
+				.setId(id)
+				.setNome(nome)
+				.setPartida(partida)
+				.setPosicoes(posicoes);
+	}
+
 	public Integer getId() {
 		return id;
 	}
+
+	public Jogador setId(Integer id) {
+		this.id = id;
+		return this;
+	}
+
 	public String getNome() {
 		return nome;
 	}
-	
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public void setNome(String nome) {
+
+	public Jogador setNome(String nome) {
 		this.nome = nome;
+		return this;
+	}
+
+	public Set<String> getPosicoes() {
+		return posicoes;
+	}
+
+	public Jogador setPosicoes(Set<String> posicoes) {
+		this.posicoes = posicoes;
+		return this;
 	}
 
 	public Partida getPartida() {
 		return partida;
 	}
 
-	public void setPartida(Partida partida) {
+	public Jogador setPartida(Partida partida) {
 		this.partida = partida;
-	}
-
-	public Set<String> getPosicoes() {
-		return posicoes;
+		return this;
 	}
 
 	@Override
