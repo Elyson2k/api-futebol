@@ -25,6 +25,7 @@ public class Partida implements Serializable{
 	private Integer id;
 	private String local;
 	private Date horas;
+	private Integer qtdJogadores;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "partida")
@@ -33,10 +34,11 @@ public class Partida implements Serializable{
 	public Partida() {
 	}
 
-	public Partida(Integer id, String local, Date horas) {
+	public Partida(Integer id, String local, Date horas, Integer qtdJogadores) {
 		this.id = id;
 		this.local = local;
 		this.horas = horas;
+		this.qtdJogadores = (qtdJogadores==null) ? null : qtdJogadores;
 	}
 
 	public Integer getId() {
@@ -86,4 +88,11 @@ public class Partida implements Serializable{
 		return Objects.equals(horas, other.horas);
 	}
 
+	public Integer getQtdJogadores() {
+		return qtdJogadores;
+	}
+
+	public void setQtdJogadores(Integer qtdJogadores) {
+		this.qtdJogadores = qtdJogadores;
+	}
 }

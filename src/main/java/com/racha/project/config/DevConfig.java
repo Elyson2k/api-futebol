@@ -16,10 +16,10 @@ public class DevConfig {
 	@Autowired
 	private DBService dbService;
 	
-	@Bean
-	public boolean instantiateDatabase() throws ParseException {
-		dbService.instantiateTestDataBase();
-		return true;
-	}
+//	@Bean
+//	public boolean instantiateDatabase() throws ParseException {
+//		dbService.instantiateTestDataBase();
+//		return true;
+//	}
 
 }

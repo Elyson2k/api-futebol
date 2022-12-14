@@ -1,48 +1,48 @@
 package com.racha.project.entities;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.racha.project.entities.base.Auditable;
+import com.racha.project.entities.dto.HistoricoVotosDTO;
+import com.racha.project.enums.Status;
+import com.racha.project.enums.TipoJogador;
 
 @Entity
 @Table(name = "JOGADOR")
-public class Jogador implements Serializable{
+public class Jogador extends Auditable<String> implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
-	
-	@ElementCollection
-	@CollectionTable(name = "POSICAO")
-	private Set<String> posicoes = new HashSet<>();
+
+	@Enumerated(EnumType.STRING)
+	private TipoJogador tipoJogador;
 	
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "PARTIDA_ID")
 	private Partida partida;
-	
+	@Enumerated(EnumType.STRING)
+	private Status status;
+	private Double nivelJogador;
+
 	public Jogador() {};
 	
-	public Jogador(Integer id, String nome, Partida partida) {
+	public Jogador(Integer id, String nome, Partida partida, TipoJogador tipoJogador, Status status, Double nivelJogador) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.partida = partida;
+		this.tipoJogador = tipoJogador;
+		this.status = status;
+		this.nivelJogador = nivelJogador;
 	}
 
 	public Jogador clone() {
@@ -50,7 +50,7 @@ public class Jogador implements Serializable{
 				.setId(id)
 				.setNome(nome)
 				.setPartida(partida)
-				.setPosicoes(posicoes);
+				.setTipoJogador(tipoJogador);
 	}
 
 	public Integer getId() {
@@ -71,15 +71,6 @@ public class Jogador implements Serializable{
 		return this;
 	}
 
-	public Set<String> getPosicoes() {
-		return posicoes;
-	}
-
-	public Jogador setPosicoes(Set<String> posicoes) {
-		this.posicoes = posicoes;
-		return this;
-	}
-
 	public Partida getPartida() {
 		return partida;
 	}
@@ -89,23 +80,32 @@ public class Jogador implements Serializable{
 		return this;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
+	public TipoJogador getTipoJogador() {
+		return tipoJogador;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Jogador other = (Jogador) obj;
-		return Objects.equals(id, other.id);
+	public Jogador setTipoJogador(TipoJogador tipoJogador) {
+		this.tipoJogador = tipoJogador;
+		return this;
 	}
-	
-	
-	
+
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public Jogador setStatus(Status status) {
+		this.status = status;
+		return this;
+	}
+
+	public Double getNivelJogador() {
+		return nivelJogador;
+	}
+
+	public Jogador setNivelJogador(Double nivelJogador) {
+		this.nivelJogador = nivelJogador;
+		return this;
+	}
+
 }

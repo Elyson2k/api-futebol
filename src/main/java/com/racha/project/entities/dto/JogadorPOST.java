@@ -3,8 +3,13 @@ package com.racha.project.entities.dto;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import com.racha.project.enums.Status;
+import com.racha.project.enums.TipoJogador;
 import org.hibernate.validator.constraints.Length;
 
 public class JogadorPOST implements Serializable{
@@ -13,21 +18,20 @@ public class JogadorPOST implements Serializable{
 	@NotEmpty(message = "Preenchimento obrigatorio.")
 	@Length(min = 4, max = 15, message = "Comprimento minimo : 4 letras / maximo : 15")
 	private String nome;
-	@NotEmpty(message = "Preenchimento obrigatorio.")
-	@Length(min = 2, max = 3, message = "Comprimento minimo : 3 letras / maximo : 3")
-	private String pos1;
-	private String pos2;
-	private Integer partidaId;
+
+	private TipoJogador tipoJogador;
+	private Status status = Status.ATIVO;
+    @NotNull(message = "Campo não pode ser nulo")
+	private Double nivelJogador;
 	
 	public JogadorPOST(
 			@NotEmpty(message = "Preenchimento obrigatorio.") @Length(min = 4, max = 15, message = "Comprimento minimo : 4 letras / maximo : 15") String nome,
-			@NotEmpty(message = "Preenchimento obrigatorio.") @Length(min = 2, max = 3, message = "Comprimento minimo : 3 letras / maximo : 3") String pos1,
-			String pos2, Integer partidaId) {
+			@NotEmpty(message = "Preenchimento obrigatorio.") @Length(min = 2, max = 3, message = "Comprimento minimo : 3 letras / maximo : 3")
+			TipoJogador tipoJogador, Double nivelJogador) {
 		super();
 		this.nome = nome;
-		this.pos1 = pos1;
-		this.pos2 = pos2;
-		this.partidaId = partidaId;
+		this.tipoJogador = tipoJogador;
+		this.nivelJogador = nivelJogador;
 	}
 
 
@@ -38,51 +42,36 @@ public class JogadorPOST implements Serializable{
 		return nome;
 	}
 
-	public String getPos1() {
-		return pos1;
-	}
-
-	public Integer getPartidaId() {
-		return partidaId;
-	}
 
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-	public void setPos1(String pos) {
-		this.pos1 = pos;
+	public TipoJogador getTipoJogador() {
+		return tipoJogador;
 	}
 
-	public void setPartidaId(Integer partidaId) {
-		this.partidaId = partidaId;
+	public JogadorPOST setTipoJogador(TipoJogador tipoJogador1) {
+		this.tipoJogador = tipoJogador1;
+		return this;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(nome, partidaId);
+	public Status getStatus() {
+		return status;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		JogadorPOST other = (JogadorPOST) obj;
-		return Objects.equals(nome, other.nome) && Objects.equals(partidaId, other.partidaId);
+	public JogadorPOST setStatus(Status status) {
+		this.status = status;
+		return this;
 	}
 
-	public String getPos2() {
-		return pos2;
+
+	public Double getNivelJogador() {
+		return nivelJogador;
 	}
 
-	public void setPos2(String pos2) {
-		this.pos2 = pos2;
-	};
-
-	
-	
+	public JogadorPOST setNivelJogador(Double nivelJogador) {
+		this.nivelJogador = nivelJogador;
+		return this;
+	}
 }

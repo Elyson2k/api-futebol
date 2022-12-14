@@ -12,6 +12,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import com.racha.project.repository.PartidaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,7 +25,6 @@ import com.racha.project.entities.Partida;
 import com.racha.project.entities.dto.PartidaALL;
 import com.racha.project.entities.dto.PartidaDTO;
 import com.racha.project.entities.dto.PartidaPOST;
-import com.racha.project.repository.PartidaRepository;
 import com.racha.project.service.exceptions.ObjectNotFoundException;
 
 class PartidaServiceTest {
@@ -117,11 +118,11 @@ class PartidaServiceTest {
 	private void startUser() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		
-		partida = new Partida(ID,"Quadra 1", sdf.parse("25/02/2003"));
+		partida = new Partida(ID,"Quadra 1", sdf.parse("25/02/2003"),5);
 		partidaDto = new PartidaDTO(ID,"Quadra 1", sdf.parse("25/02/2003"));
-		optionalPartida = Optional.of(new Partida(ID,"Quadra 2", sdf.parse("25/02/2003")));
+		optionalPartida = Optional.of(new Partida(ID,"Quadra 2", sdf.parse("25/02/2003"),5));
 		partidaALL = new PartidaALL(ID,"Quadra 1", sdf.parse("25/02/2003"));
-		partidaPOST = new PartidaPOST("Quadra 1", sdf.parse("25/02/2003"));
+		partidaPOST = new PartidaPOST("Quadra 1", sdf.parse("25/02/2003"),5);
 		
 	}
 	

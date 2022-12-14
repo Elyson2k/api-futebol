@@ -1,5 +1,6 @@
 package com.racha.project.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -12,6 +13,10 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import com.racha.project.enums.Status;
+import com.racha.project.enums.TipoJogador;
+import com.racha.project.repository.PartidaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,11 +28,10 @@ import org.mockito.MockitoAnnotations;
 import com.racha.project.entities.Jogador;
 import com.racha.project.entities.Partida;
 import com.racha.project.entities.dto.JogadorALL;
-import com.racha.project.entities.dto.JogadorDTO;
 import com.racha.project.entities.dto.JogadorPOST;
-import com.racha.project.entities.dto.JogadorPUT;
+import com.racha.project.entities.dto.JogadorPatch;
 import com.racha.project.repository.JogadorRepository;
-import com.racha.project.repository.PartidaRepository;
+
 class JogadorServiceTest {
 
 	private static final int ID_JOGADOR = 1;
@@ -43,7 +47,7 @@ class JogadorServiceTest {
 	private JogadorPOST jogadorPOST;
 	private Jogador jogador;
 	private Jogador jogadorInsert;
-	private JogadorPUT jogadorPUT;
+	private JogadorPatch jogadorPatch;
 	private PartidaRepository partidaRepository;
 	private Optional<Partida> optionalPartida;
 	private Partida partida;
@@ -61,7 +65,7 @@ class JogadorServiceTest {
 				.thenReturn(Optional.empty());
 		when(jogadorRepository.save(jogadorInsert))
 				.thenReturn(jogador);
-		when(partidaService.findById(jogadorPUT.getPartidaId()))
+		when(partidaService.findById(jogadorPatch.getPartidaId()))
 				.thenReturn(partida);
 	}
 
@@ -87,10 +91,9 @@ class JogadorServiceTest {
 	@Test
 	void testInsert() {
 		Jogador response = jogadorService.insert(jogadorPOST);
-		
+
 		assertNotNull(response);
 		assertEquals(Jogador.class, response.getClass());
-		assertEquals(jogador.getId(), response.getId());
 		assertEquals(jogador.getNome(), response.getNome());
 	}
 
@@ -99,12 +102,11 @@ class JogadorServiceTest {
 		when(jogadorRepository.findById(Mockito.any())).thenReturn(optionalJogador);
 		when(jogadorRepository.save(Mockito.any())).thenReturn(jogador);
 
-		Jogador response = jogadorService.update(jogadorPUT);
+		Jogador response = jogadorService.update(jogadorPatch);
 
 		assertNotNull(response);
 		assertEquals(Jogador.class, response.getClass());
-		assertEquals(jogadorPUT.getNome(), response.getNome());
-		assertEquals(jogadorPUT.getPosicoes(), response.getPosicoes());
+		assertEquals(jogadorPatch.getNome(), response.getNome());
 	}
 
 	@Test
@@ -114,15 +116,14 @@ class JogadorServiceTest {
 		when(jogadorRepository.findById(Mockito.any())).thenReturn(optionalJogador);
 		when(jogadorRepository.save(Mockito.any())).thenReturn(jogadorPatchParcial);
 
-		jogadorPUT.setNome("Gabriel");
-		jogadorPUT.setPartidaId(null);
-		jogadorPUT.setPosicoes(null);
+		jogadorPatch.setNome("Gabriel");
+		jogadorPatch.setPartidaId(null);
 
-		Jogador response = jogadorService.update(jogadorPUT);
+		Jogador response = jogadorService.update(jogadorPatch);
 
 		assertNotNull(response);
 		assertEquals(Jogador.class, response.getClass());
-		assertEquals(jogadorPUT.getNome(), response.getNome());
+		assertEquals(jogadorPatch.getNome(), response.getNome());
 	}
 
 	@Test
@@ -135,11 +136,11 @@ class JogadorServiceTest {
 	
 	private void startUser() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		partida = new Partida(10, "Quadra 1", sdf.parse("25/02/2003"));
-		optionalJogador = Optional.of(new Jogador(ID_JOGADOR,"Elyson", partida));
-		jogador = new Jogador(ID_JOGADOR, "Elyson", partida);
-		jogadorInsert = new Jogador(null, "Elyson", partida);
-		jogadorPUT = new JogadorPUT(ID_JOGADOR, "Elyson", 10, "MAT");
-		jogadorPOST = new JogadorPOST("Elyson", "MAT", "GOL", 10);
+		partida = new Partida(10, "Quadra 1", sdf.parse("25/02/2003"),5);
+		optionalJogador = Optional.of(new Jogador(ID_JOGADOR,"Elyson", partida, TipoJogador.JOGADOR, Status.ATIVO, 5.0));
+		jogador = new Jogador(ID_JOGADOR, "Elyson", partida, TipoJogador.JOGADOR, Status.ATIVO, 5.0);
+		jogadorInsert = new Jogador(null, "Elyson", partida, TipoJogador.JOGADOR, Status.ATIVO, 5.0);
+		jogadorPatch = new JogadorPatch(ID_JOGADOR, "Elyson", 10, TipoJogador.JOGADOR);
+		jogadorPOST = new JogadorPOST("Elyson", TipoJogador.JOGADOR, 10.0);
 	}
 }

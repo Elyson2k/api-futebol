@@ -1,14 +1,18 @@
 package com.racha.project.service;
 
+import com.racha.project.entities.HistoricoVotos;
 import com.racha.project.entities.Jogador;
 import com.racha.project.entities.Partida;
-import com.racha.project.entities.dto.JogadorALL;
-import com.racha.project.entities.dto.JogadorPOST;
-import com.racha.project.entities.dto.JogadorPUT;
+import com.racha.project.entities.dto.*;
+import com.racha.project.enums.Status;
+import com.racha.project.repository.HistoricoVotosRepository;
 import com.racha.project.repository.JogadorRepository;
+import com.racha.project.service.exceptions.JogadorExceptions;
 import com.racha.project.service.exceptions.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,9 +23,12 @@ public class JogadorService {
 
 	private final PartidaService partidaService;
 
-	public JogadorService(JogadorRepository jogadorRepository, PartidaService partidaService) {
+	private final HistoricoVotosRepository historicoVotosRepository;
+
+	public JogadorService(JogadorRepository jogadorRepository, PartidaService partidaService, HistoricoVotosRepository historicoVotosRepository) {
 		this.jogadorRepository = jogadorRepository;
 		this.partidaService = partidaService;
+		this.historicoVotosRepository = historicoVotosRepository;
 	}
 
 
@@ -39,28 +46,70 @@ public class JogadorService {
 	}
 
 	public Jogador insert(JogadorPOST jogPost) {
-		Partida partida = new Partida(jogPost.getPartidaId(), null, null);
-		Jogador jogador = new Jogador(null, jogPost.getNome(), partida);
+		Jogador jogador = new Jogador(null, jogPost.getNome(), null, jogPost.getTipoJogador(),jogPost.getStatus(), jogPost.getNivelJogador());
+		jogadorRepository.save(jogador);
+		return jogador;
+	}
 
-		jogador.getPosicoes().add(jogPost.getPos1());
-		if (jogPost.getPos2() != null) {
-			jogador.getPosicoes().add(jogPost.getPos2());
+
+	public Jogador insertDiretamente(Integer idJogador, Integer idPartida){
+		Partida partida = partidaService.findById(idPartida);
+		Jogador jogador = findById(idJogador);
+
+		if(partida.getJogadores().size() >= partida.getQtdJogadores()) {
+			throw new JogadorExceptions("ERROR: Partida cheia, por favor procure outra partida.");
 		}
+		if(jogador.getStatus().equals(Status.INATIVO)) {
+			throw new JogadorExceptions("ERROR: Jogador INATIVO, não pode ser inserido");
+		}
+		partida.getJogadores().add(jogador);
+		jogador.setPartida(partida);
 		return jogadorRepository.save(jogador);
 	}
 	
-	public Jogador update(JogadorPUT jogadorDto) {
+	public Jogador update(JogadorPatch jogadorDto) {
 		Jogador obj = findById(jogadorDto.getId());
 		obj.setNome(jogadorDto.getNome());
 		Partida partida = partidaService.findById(jogadorDto.getPartidaId());
 		if(jogadorDto.getPartidaId() != null) {
 			obj.setPartida(partida);
 		}
-		if(jogadorDto.getPosicao() != null) {
-			obj.getPosicoes().add(jogadorDto.getPosicao());
+		if(jogadorDto.getTipoJogador() != null) {
+			obj.setTipoJogador(jogadorDto.getTipoJogador());
 		}
 		return jogadorRepository.save(obj);
 	}
+
+	public void alterarStatusInativo(Integer alterar){
+		Jogador jogador = findById(alterar);
+		jogador.setStatus(Status.INATIVO);
+		jogador.setPartida(null);
+		jogador.setTipoJogador(null);
+		jogadorRepository.save(jogador);
+	}
+
+	public void alterarStatusAtivo(Integer alterar){
+		Jogador jogador = findById(alterar);
+		jogador.setStatus(Status.ATIVO);
+		jogadorRepository.save(jogador);
+	}
+
+	public void jogadorVotar(Integer idVotante, Integer idVotado, Votos votos){
+		Jogador votante = findById(idVotante);
+		Jogador votado = findById(idVotado);
+		votado.setNivelJogador((votado.getNivelJogador() + votos.getVotar()) / 2);
+		HistoricoVotos historico = new HistoricoVotos();
+		historico.setIdVotante(votante.getId());
+		historico.setIdVotado(votado.getId());
+		jogadorRepository.saveAll(Arrays.asList(votante,votado));
+		historicoVotosRepository.save(historico);
+	}
+
+	public List<HistoricoVotosDTO> findAllVotes(){
+		List<HistoricoVotos> listHistorico = historicoVotosRepository.findAll();
+		return listHistorico.stream().map(jogador1 -> new HistoricoVotosDTO(jogador1)).collect(Collectors.toList());
+	}
+
 	
 	public void delete(Integer id) {
 		findById(id);

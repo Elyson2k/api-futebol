@@ -1,28 +1,38 @@
 package com.racha.project.entities.dto;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.racha.project.entities.Jogador;
 import com.racha.project.entities.Partida;
+import com.racha.project.enums.Status;
+import com.racha.project.enums.TipoJogador;
 
 public class JogadorDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
 	private String nome;
-	private Set<String> posicoes = new HashSet<>();
+	private TipoJogador tipoJogador;
 	private Partida partida;
-	
+	private Status status;
+	private Double nivelJogador;
+
+	@JsonIgnore
+	private Map<String, Integer> votos = new HashMap<>();
+
 	public JogadorDTO() {};
 	
 	public JogadorDTO(Jogador obj) {
 		super();
 		this.id = obj.getId();
+		this.status = obj.getStatus();
 		this.nome = obj.getNome();
+		this.nivelJogador = obj.getNivelJogador();
+		this.tipoJogador = obj.getTipoJogador();
 		this.partida = obj.getPartida();
-		this.posicoes = obj.getPosicoes();
+
 	}
 
 	public Integer getId() {
@@ -31,6 +41,15 @@ public class JogadorDTO implements Serializable{
 
 	public String getNome() {
 		return nome;
+	}
+
+	public TipoJogador getTipoJogador() {
+		return tipoJogador;
+	}
+
+	public JogadorDTO setTipoJogador(TipoJogador tipoJogador) {
+		this.tipoJogador = tipoJogador;
+		return this;
 	}
 
 	public void setId(Integer id) {
@@ -49,12 +68,31 @@ public class JogadorDTO implements Serializable{
 		this.partida = partida;
 	}
 
-	public Set<String> getPosicoes() {
-		return posicoes;
+
+	public Status getStatus() {
+		return status;
 	}
 
-	public void setPosicoes(Set<String> pos) {
-		this.posicoes = pos;
+	public JogadorDTO setStatus(Status status) {
+		this.status = status;
+		return this;
 	}
-	
+
+	public Double getNivelJogador() {
+		return nivelJogador;
+	}
+
+	public JogadorDTO setNivelJogador(Double nivelJogador) {
+		this.nivelJogador = nivelJogador;
+		return this;
+	}
+
+	public Map<String, Integer> getVotos() {
+		return votos;
+	}
+
+	public JogadorDTO setVotos(Map<String, Integer> votos) {
+		this.votos = votos;
+		return this;
+	}
 }

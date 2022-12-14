@@ -2,9 +2,12 @@ package com.racha.project.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.racha.project.entities.dto.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.racha.project.entities.dto.JogadorALL;
-import com.racha.project.entities.dto.JogadorDTO;
-import com.racha.project.entities.dto.JogadorPOST;
-import com.racha.project.entities.dto.JogadorPUT;
 import com.racha.project.service.JogadorService;
 
 //import io.swagger.annotations.ApiOperation;
@@ -35,17 +34,23 @@ public class JogadorController {
 	}
 
 	@GetMapping
-//	@ApiOperation(value="Retorna uma lista de partidas")
 	public ResponseEntity<List<JogadorALL>> findAll(){
 		List<JogadorALL> listAll = jogadorService.findAll();
 		return ResponseEntity.ok(listAll);
 	}
-	
+
+	@GetMapping(value = "/votos")
+	public ResponseEntity<List<HistoricoVotosDTO>> findVotosById(){
+		List<HistoricoVotosDTO> list = jogadorService.findAllVotes();
+		return ResponseEntity.ok(list);
+	}
+
 	@GetMapping(value = "/{id}")
-//	@ApiOperation(value="Retorna uma unica partida")
 	public ResponseEntity<JogadorDTO> findById(@PathVariable Integer id){
 		return ResponseEntity.ok(new JogadorDTO(jogadorService.findById(id)));
 	}
+
+
 
 //	LOGGER.info("m=init stage=init, id:{}", id);
 //	var pidValidationResponse = PidValidationConverter.fromEntityToInitResponseV2(
@@ -54,25 +59,45 @@ public class JogadorController {
 //	return pidValidationResponse;
 	
 	@PostMapping
-//	@ApiOperation(value="Inserir uma partida")
 	public ResponseEntity<Void> insert(@Valid @RequestBody JogadorPOST partPOST){
 		var id = jogadorService.insert(partPOST).getId();
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 		return ResponseEntity.created(uri).build();
 	}
-	
-	@SuppressWarnings("unused")
+
+	@PostMapping("/{idJogador}/partida/{idPartida}")
+	public ResponseEntity<Void> insertNaPartida(@PathVariable Integer idPartida, @PathVariable Integer idJogador){
+		jogadorService.insertDiretamente(idJogador,idPartida);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+
+	@PostMapping("/{idVotante}/votar/{idVotado}")
+	public ResponseEntity<Void> insertNaPartida(@PathVariable Integer idVotante, @PathVariable Integer idVotado, @RequestBody Votos votos){
+		jogadorService.jogadorVotar(idVotante,idVotado,votos);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+
 	@PutMapping(value = "/{id}")
-//	@ApiOperation(value="Atualiza uma partida")
-	public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody JogadorPUT obj){
+	public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody JogadorPatch obj){
 		obj.setId(id);
 		var newObj1 = jogadorService.update(obj);		
-		JogadorPUT newObj2 = new JogadorPUT(newObj1);
+		JogadorPatch newObj2 = new JogadorPatch(newObj1);
+		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping(value = "/{id}/inativar")
+	public ResponseEntity<Void> updateStatusInativo(@PathVariable Integer id){
+		jogadorService.alterarStatusInativo(id);
+		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping(value = "/{id}/ativar")
+	public ResponseEntity<Void> updateStatusAtivo(@PathVariable Integer id){
+		jogadorService.alterarStatusAtivo(id);
 		return ResponseEntity.ok().build();
 	}
 	
 	@DeleteMapping(value = "/{id}")
-//	@ApiOperation(value="Exclui uma partida")
 	public ResponseEntity<Void> delete(@PathVariable Integer id){	
 		jogadorService.delete(id);
 		return ResponseEntity.ok().build();

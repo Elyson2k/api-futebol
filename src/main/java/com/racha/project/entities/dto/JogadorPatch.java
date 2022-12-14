@@ -5,35 +5,35 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.racha.project.entities.Jogador;
+import com.racha.project.enums.TipoJogador;
 
-public class JogadorPUT implements Serializable{
+public class JogadorPatch implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
 	private String nome;
-	private Set<String> posicoes = new HashSet<>();
+	private TipoJogador tipoJogador;
 	private Integer partidaId;
-	private String posicao;
+
+	public JogadorPatch() {};
 	
-	public JogadorPUT() {};
 	
-	
-	public JogadorPUT(Integer id, String nome, Integer partidaId, String posicao) {
+	public JogadorPatch(Integer id, String nome, Integer partidaId, TipoJogador tipoJogador) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.partidaId = partidaId;
-		this.posicao = posicao;
+		this.tipoJogador = tipoJogador;
 	}
 
 
 
-	public JogadorPUT(Jogador obj) {
+	public JogadorPatch(Jogador obj) {
 		super();
 		this.id = obj.getId();
 		this.nome = obj.getNome();
 		this.partidaId = obj.getPartida().getId();
-		this.posicoes = obj.getPosicoes();
+		this.tipoJogador = obj.getTipoJogador();
 	}
 
 	public Integer getId() {
@@ -44,16 +44,8 @@ public class JogadorPUT implements Serializable{
 		return nome;
 	}
 
-	public Set<String> getPosicoes() {
-		return posicoes;
-	}
-
 	public Integer getPartidaId() {
 		return partidaId;
-	}
-
-	public String getPosicao() {
-		return posicao;
 	}
 
 	public void setId(Integer id) {
@@ -64,16 +56,18 @@ public class JogadorPUT implements Serializable{
 		this.nome = nome;
 	}
 
-	public void setPosicoes(Set<String> posicoes) {
-		this.posicoes = posicoes;
-	}
-
 	public void setPartidaId(Integer partidaId) {
 		this.partidaId = partidaId;
 	}
 
-	public void setPosicao(String posicao) {
-		this.posicao = posicao;
+	public TipoJogador getTipoJogador() {
+		return tipoJogador;
 	}
+
+	public JogadorPatch setTipoJogador(TipoJogador tipoJogador) {
+		this.tipoJogador = tipoJogador;
+		return this;
+	}
+
 	
 }

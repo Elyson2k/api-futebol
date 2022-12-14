@@ -5,19 +5,22 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.racha.project.entities.Jogador;
+import com.racha.project.enums.TipoJogador;
 
 public class JogadorALL implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
 	private String nome;
-	private Set<String> pos = new HashSet<>();
-	
+
+	private TipoJogador tipoJogador;
+
 	public JogadorALL() {};
 	
 	public JogadorALL(Jogador obj) {
 		this.id = obj.getId();
 		this.nome = obj.getNome();
+		this.tipoJogador = obj.getTipoJogador();
 	}
 
 	public Integer getId() {
@@ -36,12 +39,13 @@ public class JogadorALL implements Serializable{
 		this.nome = nome;
 	}
 
-	public Set<String> getPos() {
-		return pos;
+	public TipoJogador getTipoJogador() {
+		return tipoJogador;
 	}
 
-	public void setPos(Set<String> pos) {
-		this.pos = pos;
+	public JogadorALL setTipoJogador(TipoJogador tipoJogador) {
+		this.tipoJogador = tipoJogador;
+		return this;
 	}
 
 }

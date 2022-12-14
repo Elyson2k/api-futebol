@@ -24,20 +24,23 @@ public class PartidaController {
 	}
 
 	@GetMapping
-//	@ApiOperation(value="Retorna uma lista de jogadores")
 	public ResponseEntity<List<PartidaALL>> findAll(){
+		List<PartidaALL> listAll = partidaService.findAll();
+		return ResponseEntity.ok(listAll);
+	}
+
+	@GetMapping("/disponivel")
+	public ResponseEntity<List<PartidaALL>> findDisponivel(){
 		List<PartidaALL> listAll = partidaService.findAll();
 		return ResponseEntity.ok(listAll);
 	}
 	
 	@GetMapping(value = "/{id}")
-//	@ApiOperation(value="Retorna um jogador")
 	public ResponseEntity<PartidaDTO> find(@PathVariable Integer id){
 		return ResponseEntity.ok(new PartidaDTO(partidaService.findById(id)));
 	}
 	
 	@PostMapping
-//	@ApiOperation(value="Insere um jogador")
 	public ResponseEntity<Void> insert(@RequestBody PartidaPOST partPOST){
 		var id = partidaService.insert(partPOST).getId();
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
@@ -45,7 +48,6 @@ public class PartidaController {
 	}
 
 	@PatchMapping(value = "/{id}")
-//	@ApiOperation(value="Atualiza um jogador")
 	public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody PartidaDTO partPOST){
 		partPOST.setId(id);
 		var partida = partidaService.update(partPOST);		
@@ -54,7 +56,6 @@ public class PartidaController {
 	}
 	
 	@DeleteMapping(value = "/{id}")
-//	@ApiOperation(value="Deleta um jogador")
 	public ResponseEntity<Void> delete(@PathVariable Integer id){	
 		partidaService.delete(id);
 		return ResponseEntity.ok().build();

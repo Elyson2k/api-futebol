@@ -1,11 +1,11 @@
 package com.racha.project.repository;
 
+import com.racha.project.entities.Partida;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import com.racha.project.entities.Partida;
+import org.springframework.data.repository.Repository;
 
-@Repository
 public interface PartidaRepository extends JpaRepository<Partida, Integer>{
 
 }

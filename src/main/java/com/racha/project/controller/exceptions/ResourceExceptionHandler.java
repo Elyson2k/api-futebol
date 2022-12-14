@@ -2,6 +2,7 @@ package com.racha.project.controller.exceptions;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.racha.project.service.exceptions.JogadorExceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -30,6 +31,12 @@ public class ResourceExceptionHandler {
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<StandardError> empty( IllegalArgumentException e, HttpServletRequest request){
 		StandardError err = new StandardError(HttpStatus.NOT_FOUND.value(), "ERROR: Não foi possivel encontrar o ID informado.", System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+	}
+
+	@ExceptionHandler(JogadorExceptions.class)
+	public ResponseEntity<StandardError> empty( JogadorExceptions e, HttpServletRequest request){
+		StandardError err = new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage(), System.currentTimeMillis());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
 	}
 	

@@ -1,15 +1,16 @@
 package com.racha.project.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.racha.project.repository.PartidaRepository;
 import org.springframework.stereotype.Service;
 
 import com.racha.project.entities.Partida;
 import com.racha.project.entities.dto.PartidaALL;
 import com.racha.project.entities.dto.PartidaDTO;
 import com.racha.project.entities.dto.PartidaPOST;
-import com.racha.project.repository.PartidaRepository;
 import com.racha.project.service.exceptions.ObjectNotFoundException;
 
 @Service
@@ -20,6 +21,7 @@ public class PartidaService {
 		this.partidaRepository = partidaRepository;
 	}
 
+//	return partidaRepository.findAll().stream().map(obj -> new PartidaALL(obj)).collect(Collectors.toList());
 	public List<PartidaALL> findAll(){
 		return partidaRepository.findAll().stream().map(obj -> new PartidaALL(obj)).collect(Collectors.toList());
 	}
@@ -30,11 +32,12 @@ public class PartidaService {
 	}
 	
 	public Partida insert(PartidaPOST partida) {
-		Partida obj = new Partida();
-		obj.setId(null);
-		obj.setLocal(partida.getLocal());
-		obj.setHoras(partida.getHoras());
-		return partidaRepository.save(obj);
+		Partida partidaEntity = new Partida();;
+		partidaEntity.setId(null);
+		partidaEntity.setLocal(partida.getLocal());
+		partidaEntity.setHoras(partida.getHoras());
+		partidaEntity.setQtdJogadores(partida.getQtdJogadores());
+		return partidaRepository.save(partidaEntity);
 	}
 		
 	public Partida update(PartidaDTO partida) {
@@ -51,5 +54,6 @@ public class PartidaService {
 		partidaRepository.deleteById(id);
 		
 	}
+
 	
 }

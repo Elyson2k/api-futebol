@@ -1,7 +1,11 @@
 package com.racha.project.entities.dto;
 
+import com.racha.project.entities.Jogador;
+
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 
@@ -10,11 +14,14 @@ public class PartidaPOST {
 	private String local;
 	@Column(unique = true)
 	private Date horas;
-	
-	public PartidaPOST(String local, Date horas) {
+	private Integer qtdJogadores;
+
+
+	public PartidaPOST(String local, Date horas, Integer qtdJogadores) {
 		super();
 		this.local = local;
 		this.horas = horas;
+		this.qtdJogadores = qtdJogadores;
 	}
 
 	public PartidaPOST() {}
@@ -51,6 +58,13 @@ public class PartidaPOST {
 		PartidaPOST other = (PartidaPOST) obj;
 		return Objects.equals(horas, other.horas) && Objects.equals(local, other.local);
 	};
-	
-	
+
+	public Integer getQtdJogadores() {
+		return qtdJogadores;
+	}
+
+
+	public void setQtdJogadores(Integer qtdJogadores) {
+		this.qtdJogadores = qtdJogadores;
+	}
 }
